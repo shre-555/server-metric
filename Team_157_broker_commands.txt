@@ -1,0 +1,26 @@
+1) Configuring Kafka for ZerTier 
+ cd /opt/kafka/config
+ sudo nano server.properties
+
+Modify these lines:
+ # Change this to your ZeroTier IP
+ listeners=PLAINTEXT://172.25.33.31:9092
+ advertised.listeners=PLAINTEXT://172.25.33.31:9092
+ # Keep these as default
+ zookeeper.connect=localhost:2181
+ log.dirs=/tmp/kafka-logs
+
+2) Start ZooKeeper
+ cd /opt/kafka
+ ./bin/zookeeper-server-start.sh config/zookeeper.properties
+
+3) Start Kafka Broker
+ cd /opt/kafka
+ ./bin/kafka-server-start.sh config/server.properties
+
+4) Create Kafka Topics
+ cd /opt/kafka
+./bin/kafka-topics.sh --create --topic topic-cpu --bootstrap-server 172.25.33.31:9092 --partitions 1 --replication-factor 1
+./bin/kafka-topics.sh --create --topic topic-mem --bootstrap-server 172.25.33.31:9092 --partitions 1 --replication-factor 1
+./bin/kafka-topics.sh --create --topic topic-net --bootstrap-server 172.25.33.31:9092 --partitions 1 --replication-factor 1
+./bin/kafka-topics.sh --create --topic topic-disk --bootstrap-server 172.25.33.31:9092 --partitions 1 --replication-factor 1
